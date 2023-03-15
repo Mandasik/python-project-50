@@ -12,7 +12,7 @@ jobs:
       - run: make lint
       - run: make p_test
       - name: Test & publish code coverage
-        uses: Mandasik/python-project-50@v1.0.0
+        uses: Mandasik/python-project-50@v1.0.1
         if: github.ref_name == 'main'
         env:
           MY_TESTS: ${{ secrets.MY_TESTS }}
