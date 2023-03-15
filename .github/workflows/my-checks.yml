@@ -13,4 +13,3 @@ jobs:
       - run: make p_test
       with:
         hexlet-id: ${{ secrets.MY_TESTS }}
-      
