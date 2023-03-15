@@ -15,3 +15,6 @@ lint:
 
 p_test:
 	poetry run pytest
+
+test-coverage:
+	poetry run pytest --cov

@@ -11,5 +11,8 @@ jobs:
           make install
       - run: make lint
       - run: make p_test
+      env:
+        MY_TESTS: ${{ secrets.MY_TESTS }}
       with:
-        hexlet-id: ${{ secrets.MY_TESTS }}
+        coverageCommand: make test-coverage
+        debug: true
