@@ -11,3 +11,6 @@ jobs:
           make install
       - run: make lint
       - run: make p_test
+      with:
+        hexlet-id: ${{ secrets.MY_TESTS }}
+      
