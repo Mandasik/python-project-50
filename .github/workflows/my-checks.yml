@@ -10,3 +10,4 @@ jobs:
           pip install poetry
           make install
       - run: make lint
+      - run: make p_test

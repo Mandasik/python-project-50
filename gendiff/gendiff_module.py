@@ -4,12 +4,10 @@ from itertools import chain
 
 def get_str_rec(file_one, file_two, key):
     if key in file_one and key in file_two:
-        if file_one[key] == file_two[key]:
-            return f"{key}: {file_one[key]}"
-        else:
-            first = f"- {key}: {file_one[key]}"
-            second = f"+ {key}: {file_two[key]}"
-            return first, second
+        first, second = file_one[key], file_two[key]
+        same = f"{key}: {first}"
+        different = (f"- {key}: {first}", f"+ {key}: {second}")
+        return same if first == second else different
     else:
         return (
             f"- {key}: {file_one[key]}"

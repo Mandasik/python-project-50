@@ -12,3 +12,6 @@ build:
 
 lint:
 	poetry run flake8 gendiff
+
+p_test:
+	poetry run pytest
