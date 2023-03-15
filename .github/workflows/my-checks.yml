@@ -11,8 +11,11 @@ jobs:
           make install
       - run: make lint
       - run: make p_test
-      env:
-        MY_TESTS: ${{ secrets.MY_TESTS }}
-      with:
-        coverageCommand: make test-coverage
-        debug: true
+      - name: Test & publish code coverage
+        uses: Mandasik/codeclimate-action@v3.2.0
+        if: github.ref_name == 'main'
+        env:
+          MY_TESTS: ${{ secrets.MY_TESTS }}
+        with:
+          coverageCommand: make test-coverage
+          debug: true
