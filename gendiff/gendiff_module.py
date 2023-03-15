@@ -3,11 +3,11 @@ from itertools import chain
 
 
 def get_str_rec(file_one, file_two, key):
-    if key in file_one and key in file_two:
-        first, second = file_one[key], file_two[key]
-        same = f"{key}: {first}"
-        different = (f"- {key}: {first}", f"+ {key}: {second}")
-        return same if first == second else different
+    if key in file_one and key in file_two and file_one[key] == file_two[key]:
+        return f"{key}: {file_one[key]}"
+    elif key in file_one and key in file_two and file_one[key] != file_two[key]:
+        different = (f"- {key}: {file_one[key]}", f"+ {key}: {file_two[key]}")
+        return different
     else:
         return (
             f"- {key}: {file_one[key]}"
