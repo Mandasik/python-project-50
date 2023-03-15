@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Compares two configuration files and shows a difference."
 authors = ["Ruslan Latypov <stihyra@mail.ru>"]
 readme = "README.md"
-packages = [{include = "gen_diff"}]
+packages = [{include = "gendiff"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
@@ -14,7 +14,7 @@ flake8 = "^6.0.0"
 black = "^23.1.0"
 
 [tool.poetry.scripts]
-gendiff = "gen_diff.scripts.gendiff:main"
+gendiff = "gendiff.scripts.gendiff_script:main"
 
 
 [build-system]
