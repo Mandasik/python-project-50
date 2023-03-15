@@ -12,10 +12,8 @@ jobs:
       - run: make lint
       - run: make p_test
       - name: Test & publish code coverage
-        uses: Mandasik/python-project-50@v1.0.1
-        if: github.ref_name == 'main'
+        uses: paambaati/codeclimate-action@v3.0.0
         env:
-          MY_TESTS: ${{ secrets.MY_TESTS }}
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         with:
-          coverageCommand: make test-coverage
-          debug: true
+            coverageCommand: make test-coverage
