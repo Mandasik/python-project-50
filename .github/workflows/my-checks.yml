@@ -1,19 +1,31 @@
-name: linnt-and-tests
-on: push
+name: lint-and-tests
+
+on:
+  push:
+    branches: [ main ]
+
+
 jobs:
-  build:
+  Test:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
-      - name: Install dependencies
-        run: |
-          pip install poetry
-          make install
-      - run: make lint
-      - run: make p_test
-      - name: Test & publish code coverage
-        uses: paambaati/codeclimate-action@v3.2.0
-        env:
-          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-        with:
-            coverageCommand: make test-coverage
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.10
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install poetry
+        make install
+    - name: Analysing the code with Python linters
+      run: |
+        make lint
+    - name: Test & publish code coverage
+      uses: paambaati/codeclimate-action@v3.2.0
+      env:
+        CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+      with:
+          coverageCommand: make test-coverage
