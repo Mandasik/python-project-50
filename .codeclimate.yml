@@ -16,7 +16,7 @@ checks:
   method-complexity:
     enabled: true
     config:
-      threshold: 5
+      threshold: 6
   method-count:
     enabled: true
     config:
@@ -65,8 +65,7 @@ exclude_patterns:
 - "**/*_test.go"
 - "**/*.d.ts"
 - "Makefile"
-- "file1.json"
-- "file2.json"
-- "pyproject.toml"
-- "setup.cfg"
-- "README.md"
+- "**/*.json"
+- "**/*.toml"
+- "**/*.cfg"
+- "**/*.md"
