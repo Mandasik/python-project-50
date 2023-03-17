@@ -1,0 +1,5 @@
+age: 28
++ cow: Sveta
+- name: John
+- occupation: Engineer
++ occupation: 1

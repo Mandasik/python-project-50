@@ -2,7 +2,7 @@ from gendiff import generate_diff
 from gendiff.gendiff_module import *
 
 
-def test_norm_gen_diff():
+def test_norm_gen_diff_json():
     with open('tests/fixtures/flat_json.txt', 'r') as correct:
         assert correct.read() == generate_diff('file1.json', 'file2.json')
 
@@ -19,4 +19,4 @@ def test_str_rec():
 def test_get_dict():
     dict_ = {"host": "hexlet.io", "timeout": 50,
              "proxy": "123.234.53.22", "follow": False}
-    assert dict_ == get_dict_from_json('file1.json')
+    assert dict_ == get_dict('file1.json')

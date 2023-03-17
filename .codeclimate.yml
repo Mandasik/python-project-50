@@ -69,3 +69,5 @@ exclude_patterns:
 - "**/*.toml"
 - "**/*.cfg"
 - "**/*.md"
+- "**/*.yml"
+- "**/*.yaml"

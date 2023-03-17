@@ -1,4 +1,7 @@
-from json import load
+from os.path import splitext
+import json
+import yaml
+from yaml.loader import SafeLoader
 from itertools import chain
 
 
@@ -16,15 +19,20 @@ def get_str_rec(file_one, file_two, key):
         )
 
 
-def get_dict_from_json(path):
-    with open(path, "r") as fp:
-        return load(fp)
+def get_dict(path):
+    _, extension = splitext(path)
+    if extension == '.json':
+        with open(path, "r") as fp:
+            return json.load(fp)
+    else:
+        with open(path, "r") as fp:
+            return yaml.load(fp, Loader=SafeLoader)
 
 
 def generate_diff(path1, path2):
     result = []
-    file_one = get_dict_from_json(path1)
-    file_two = get_dict_from_json(path2)
+    file_one = get_dict(path1)
+    file_two = get_dict(path2)
     all_keys = chain(
         file_one.keys(),
         [x for x in file_two.keys() if x not in file_one.keys()]
