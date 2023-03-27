@@ -5,7 +5,7 @@ import yaml
 from yaml.loader import SafeLoader
 
 
-def generate_diff(path1: str, path2: str):
+def generate_diff(path1: str, path2: str, format='stylish'):
     tree_diff = get_tree(get_dict(path1), get_dict(path2))
     return tree_diff
 
@@ -48,7 +48,7 @@ def get_tree(d_first: dict, d_second: dict):
 def type_of_leaf(d_first: dict, d_second: dict, key: str):
     inters = set(d_first.keys()) & set(d_second.keys())
     only_first = set(d_first.keys()) - set(d_second.keys())
-    if key in inters:
+    if key in sorted(inters):
         if isinstance(d_first[key], dict) and isinstance(d_second[key], dict):
             return 'dir'
         return 'equal' if d_first[key] == d_second[key] else 'not equal'
