@@ -3,11 +3,14 @@ from itertools import chain
 import json
 import yaml
 from yaml.loader import SafeLoader
+from gendiff.format_pkg import stylish_format
 
 
 def generate_diff(path1: str, path2: str, format_out):
     tree_diff = get_tree(get_dict(path1), get_dict(path2))
-    return tree_diff
+    if format_out == "stylish":
+        tree_out = stylish_format.stylish(tree_diff)
+    return tree_out
 
 
 def get_format(path):
