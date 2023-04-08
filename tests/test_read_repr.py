@@ -1,5 +1,6 @@
-from gendiff.diff_pkg.gendiff_module import get_format, get_dict, type_of_leaf
+from gendiff.diff_pkg.gendiff_module import get_format, get_dict, status_of_node
 from gendiff.diff_pkg.gendiff_module import get_tree, value_of_leaf, get_node
+from gendiff.diff_pkg.gendiff_module import type_of_node
 
 
 DICT_FROM_JSON = {
@@ -39,11 +40,13 @@ def test_read_get_dict():
     assert DICT_FROM_YAML == get_dict("tests/fixtures/file_one.yml")
 
 
-def test_type_of_node():
-    assert "equal" == type_of_leaf(DICT_FROM_YAML, DICT_FROM_YML, "age")
-    assert "not equal" == type_of_leaf(DICT_FROM_YAML, DICT_FROM_YML, "name")
-    assert "only 1" == type_of_leaf(DICT_FROM_YAML, DICT_FROM_YML, "occupat")
-    assert "only 2" == type_of_leaf(DICT_FROM_YAML, DICT_FROM_YML, "oc")
+def test_type_of_node_and_status():
+    assert "dir" == type_of_node(DICT_FROM_JSON, DICT2, "common")
+    assert "leaf" == type_of_node(DICT_FROM_JSON, DICT2, "setting2")
+    assert "equal" == status_of_node(DICT_FROM_YAML, DICT_FROM_YML, "age")
+    assert "not_equal" == status_of_node(DICT_FROM_YAML, DICT_FROM_YML, "name")
+    assert "only_1" == status_of_node(DICT_FROM_YAML, DICT_FROM_YML, "occupat")
+    assert "only_2" == status_of_node(DICT_FROM_YAML, DICT_FROM_YML, "oc")
 
 
 def test_value_of_leaf():
@@ -51,30 +54,33 @@ def test_value_of_leaf():
         DICT_FROM_JSON["common"], DICT2["common"], "setting1", "equal"
     )
     assert {"first": DICT_FROM_JSON["common"]["setting1"]} == value_of_leaf(
-        DICT_FROM_JSON["common"], DICT2["common"], "setting1", "only 1"
+        DICT_FROM_JSON["common"], DICT2["common"], "setting1", "only_1"
     )
     assert {
         "first": DICT_FROM_JSON["common"]["setting3"],
         "second": DICT2["common"]["setting3"],
     } == value_of_leaf(
-        DICT_FROM_JSON["common"], DICT2["common"], "setting3", "not equal"
+        DICT_FROM_JSON["common"], DICT2["common"], "setting3", "not_equal"
     )
     assert {"second": DICT2["common"]["follow"]} == value_of_leaf(
-        DICT_FROM_JSON["common"], DICT2["common"], "follow", "only 2"
+        DICT_FROM_JSON["common"], DICT2["common"], "follow", "only_2"
     )
 
 
 def test_get_node():
     assert {
         "name": "common",
-        "node type": "dir",
+        "status": "nested",
         "chieldren": ["setting1", 200, "setting3", "setting6"],
-    } == get_node("common", "dir",
-                  chieldren=["setting1", 200, "setting3", "setting6"])
+    } == get_node(
+        "common", "nested", chieldren=["setting1", 200, "setting3", "setting6"]
+    )
     assert {
-        'name': "setting1",
-        'node type': "equal",
-        'value': "Value 1"}
+        "name": "setting1",
+        "node_type": "leaf",
+        "status": "equal",
+        "value": "Value 1"
+    } == get_node("setting1", "equal", type_node="leaf", value="Value 1")
 
 
 def test_get_tree():
