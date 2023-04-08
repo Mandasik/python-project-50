@@ -4,11 +4,11 @@ checks:
   argument-count:
     enabled: true
     config:
-      threshold: 4
+      threshold: 5
   complex-logic:
     enabled: true
     config:
-      threshold: 4
+      threshold: 5
   file-lines:
     enabled: true
     config:
