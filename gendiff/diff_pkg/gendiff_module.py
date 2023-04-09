@@ -5,6 +5,7 @@ import yaml
 from yaml.loader import SafeLoader
 from gendiff.format_pkg import stylish_format
 from gendiff.format_pkg import plain_format
+from gendiff.format_pkg import json_format
 
 
 def generate_diff(path1: str, path2: str, format_out):
@@ -13,6 +14,8 @@ def generate_diff(path1: str, path2: str, format_out):
         tree_out = stylish_format.stylish(tree_diff)
     elif format_out == "plain":
         tree_out = plain_format.plain(tree_diff)
+    elif format_out == "json":
+        tree_out = json_format.json_f(tree_diff)
     return tree_out
 
 

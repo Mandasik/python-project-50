@@ -36,6 +36,8 @@ def test_generate_diff():
         assert fp.read() == generate_diff(path1, path2, "stylish")
     with open("tests/fixtures/plain_diff.txt", "r") as fp:
         assert fp.read() == generate_diff(path1, path2, "plain")
+    with open("tests/fixtures/diff_json.txt", "r") as fp:
+        assert fp.read() == generate_diff(path1, path2, "json")
 
 
 def test_read_get_dict():
