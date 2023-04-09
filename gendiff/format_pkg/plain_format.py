@@ -1,11 +1,7 @@
 from json import dumps
 
 
-def plain(tree):
-    return traverses_tree(tree)
-
-
-def traverses_tree(tree, path=""):
+def plain(tree, path=""):
     result = []
     for node in tree:
         status = node["status"]
@@ -30,7 +26,7 @@ def traverses_tree(tree, path=""):
                 )
             )
         elif status == "nested":
-            result.append(traverses_tree(node["chieldren"], name))
+            result.append(plain(node["chieldren"], name))
     return "\n".join(result)
 
 

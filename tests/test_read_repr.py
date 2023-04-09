@@ -1,6 +1,6 @@
 from gendiff.diff_pkg.gendiff_module import get_format, get_dict, status_of_node
 from gendiff.diff_pkg.gendiff_module import get_tree, value_of_leaf, get_node
-from gendiff.diff_pkg.gendiff_module import type_of_node
+from gendiff.diff_pkg.gendiff_module import type_of_node, generate_diff
 
 
 DICT_FROM_JSON = {
@@ -30,7 +30,12 @@ DICT2 = {
 
 
 def test_generate_diff():
-    pass
+    path1 = "tests/fixtures/file1.JSON"
+    path2 = "tests/fixtures/file2.json"
+    with open("tests/fixtures/diff_f1_f2_json.txt", "r") as fp:
+        assert fp.read() == generate_diff(path1, path2, "stylish")
+    with open("tests/fixtures/plain_diff.txt", "r") as fp:
+        assert fp.read() == generate_diff(path1, path2, "plain")
 
 
 def test_read_get_dict():
