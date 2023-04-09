@@ -8,7 +8,7 @@ from gendiff.format_pkg import plain_format
 from gendiff.format_pkg import json_format
 
 
-def generate_diff(path1: str, path2: str, format_out):
+def generate_diff(path1: str, path2: str, format_out="stylish"):
     tree_diff = get_tree(get_dict(path1), get_dict(path2))
     if format_out == "stylish":
         tree_out = stylish_format.stylish(tree_diff)
