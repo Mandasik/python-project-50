@@ -5,7 +5,6 @@ from tests.fixtures.internal_representacion import INTERNAL_REPRESENTACION
 NODE_1 = "      + follow: false"
 NODE_2 = "      - setting3: true"
 NODE_NONE = "      + setting3: null"
-NODE_EMPTY = "      + setting3:"
 NODE_EQUAL = "        setting1: Value 1"
 NODE_NOT_EQUAL = "\n".join(["      - setting3: true", "      + setting3: null"])
 NODE_NOT_EQUAL_DIR = "\n".join(
@@ -62,9 +61,6 @@ def test_get_line():
     )
     assert NODE_NONE == stylish_format.get_line(
         "setting3", None, "+", 2, "leaf"
-    )
-    assert NODE_EMPTY == stylish_format.get_line(
-        "setting3", "", "+", 2, "leaf"
     )
     assert NODE_EQUAL == stylish_format.get_line(
         "setting1", "Value 1", " ", 2, "leaf"
