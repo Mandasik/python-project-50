@@ -9,17 +9,17 @@ NODE_EQUAL = "        setting1: Value 1"
 NODE_NOT_EQUAL = "\n".join(["      - setting3: true", "      + setting3: null"])
 NODE_NOT_EQUAL_DIR = "\n".join(
     [
-    "      - nest: {",
-    "            key: value",
-    "        }",
-    "      + nest: str"
+    "      - nest: {", # NOQA E122
+    "            key: value", # NOQA E122
+    "        }", # NOQA E122
+    "      + nest: str" # NOQA E122
     ]
 )
 NODE_DIR1 = "\n".join(
     [
-    "        deep: {",
-    "            id: 45",
-    "        }",
+    "        deep: {", # NOQA E122
+    "            id: 45", # NOQA E122
+    "        }", # NOQA E122
     ]
 )
 NODE_DIR2 = "            id: 45"
