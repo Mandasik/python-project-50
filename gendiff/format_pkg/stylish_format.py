@@ -58,10 +58,7 @@ def get_line(name, value, mark, floor, node_type="leaf"):
     indent = SPACE * (INDENT * floor - SIGNED_INDENT)
     if node_type == "leaf":
         value = dumps(value) if isinstance(value, (bool, type(None))) else value
-        if value == "":
-            floors_list.append(f"{indent}{mark} {name}:")
-        else:
-            floors_list.append(f"{indent}{mark} {name}: {value}")
+        floors_list.append(f"{indent}{mark} {name}: {value}")
     else:
         floors_list.extend(
             [
