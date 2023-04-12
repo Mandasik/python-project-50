@@ -1,4 +1,7 @@
 from json import dumps
+from gendiff.format_pkg.constans import (
+    ONLY_1, ONLY_2, EQUAL, NOT_EQUAL, NESTED
+)
 
 
 SPACE = " "
@@ -22,7 +25,7 @@ def analyzes_node(nodes, floor=1):
         name = node["name"]
         value = node.get("value")
         node_type = node.get("node_type")
-        if status == "nested":
+        if status == NESTED:
             result.extend(
                 [
                     f"{SPACE * INDENT * floor}{name}: {OPEN_BRACKET}",
@@ -39,13 +42,13 @@ def analyzes_node(nodes, floor=1):
 
 def routes_analysis(name, value, status, floor, node_type="leaf"):
     result = []
-    if status == "only_1":
+    if status == ONLY_1:
         result.append(get_line(name, value["first"], "-", floor, node_type))
-    elif status == "only_2":
+    elif status == ONLY_2:
         result.append(get_line(name, value["second"], "+", floor, node_type))
-    elif status == "equal":
+    elif status == EQUAL:
         result.append(get_line(name, value["first"], " ", floor, node_type))
-    elif status == "not_equal":
+    elif status == NOT_EQUAL:
         node_type1 = "dir" if isinstance(value["first"], dict) else "leaf"
         node_type2 = "dir" if isinstance(value["second"], dict) else "leaf"
         result.append(get_line(name, value["first"], "-", floor, node_type1))

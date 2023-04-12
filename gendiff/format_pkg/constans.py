@@ -1,0 +1,5 @@
+ONLY_1 = "only_1"
+ONLY_2 = "only_2"
+EQUAL = "equal"
+NOT_EQUAL = "not_equal"
+NESTED = "nested"

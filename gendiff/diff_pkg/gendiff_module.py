@@ -6,6 +6,9 @@ from yaml.loader import SafeLoader
 from gendiff.format_pkg import stylish_format
 from gendiff.format_pkg import plain_format
 from gendiff.format_pkg import json_format
+from gendiff.format_pkg.constans import (
+    ONLY_1, ONLY_2, EQUAL, NOT_EQUAL, NESTED
+)
 
 
 def generate_diff(path1: str, path2: str, format_out="stylish"):
@@ -16,6 +19,8 @@ def generate_diff(path1: str, path2: str, format_out="stylish"):
         tree_out = plain_format.plain(tree_diff)
     elif format_out == "json":
         tree_out = json_format.json_f(tree_diff)
+    else:
+        return "This format is not supported"
     return tree_out
 
 
@@ -44,7 +49,7 @@ def get_tree(d_first: dict, d_second: dict):
     )
     for key in sorted(all_keys):
         description = status_of_node(d_first, d_second, key)
-        if description != "nested":
+        if description != NESTED:
             values = value_of_leaf(d_first, d_second, key, description)
             type_node = type_of_node(d_first, d_second, key)
             tree.append(get_node(key, description, type_node, value=values))
@@ -65,23 +70,23 @@ def status_of_node(d_first: dict, d_second: dict, key: str):
     only_first = set(d_first.keys()) - set(d_second.keys())
     if key in sorted(inters):
         if isinstance(d_first[key], dict) and isinstance(d_second[key], dict):
-            return "nested"
-        return "equal" if d_first[key] == d_second[key] else "not_equal"
+            return NESTED
+        return EQUAL if d_first[key] == d_second[key] else NOT_EQUAL
     else:
-        return "only_1" if key in only_first else "only_2"
+        return ONLY_1 if key in only_first else ONLY_2
 
 
 def value_of_leaf(d_first, d_second, key, description):
-    if description == "equal" or description == "only_1":
+    if description == EQUAL or description == ONLY_1:
         return {"first": d_first[key]}
-    elif description == "not_equal":
+    elif description == NOT_EQUAL:
         return {"first": d_first[key], "second": d_second[key]}
     else:
         return {"second": d_second[key]}
 
 
 def get_node(name, status, type_node=None, value=None, chieldren=None):
-    if status == "nested":
+    if status == NESTED:
         return {
             "name": name,
             "status": status,

@@ -1,6 +1,14 @@
-from gendiff.diff_pkg.gendiff_module import get_format, get_dict, status_of_node
-from gendiff.diff_pkg.gendiff_module import get_tree, value_of_leaf, get_node
-from gendiff.diff_pkg.gendiff_module import type_of_node, generate_diff
+import pytest
+from gendiff.diff_pkg.gendiff_module import (
+    get_format,
+    get_dict,
+    status_of_node,
+    get_tree,
+    value_of_leaf,
+    get_node,
+    type_of_node,
+    generate_diff,
+)
 
 
 DICT_FROM_JSON = {
@@ -29,49 +37,90 @@ DICT2 = {
 }
 
 
-def test_generate_diff():
+@pytest.mark.parametrize(
+    "format_out, path_correct",
+    [
+        ("stylish", "tests/fixtures/diff_f1_f2_json.txt"),
+        ("plain", "tests/fixtures/plain_diff.txt"),
+        ("json", "tests/fixtures/diff_json.txt"),
+    ],
+)
+def test_generate_diff(format_out, path_correct):
     path1 = "tests/fixtures/file1.JSON"
     path2 = "tests/fixtures/file2.json"
-    with open("tests/fixtures/diff_f1_f2_json.txt", "r") as fp:
-        assert fp.read() == generate_diff(path1, path2, "stylish")
-    with open("tests/fixtures/plain_diff.txt", "r") as fp:
-        assert fp.read() == generate_diff(path1, path2, "plain")
-    with open("tests/fixtures/diff_json.txt", "r") as fp:
-        assert fp.read() == generate_diff(path1, path2, "json")
-
-
-def test_read_get_dict():
-    assert ".json" == get_format("tests/fixtures/file1.JSON")
-    assert DICT_FROM_JSON == get_dict("tests/fixtures/file1.JSON")
-    assert "not supported" == get_dict("tests/fixtures/flat_jaml.txt")
-    assert DICT_FROM_YAML == get_dict("tests/fixtures/file_one.yml")
-
-
-def test_type_of_node_and_status():
-    assert "dir" == type_of_node(DICT_FROM_JSON, DICT2, "common")
-    assert "leaf" == type_of_node(DICT_FROM_JSON, DICT2, "setting2")
-    assert "equal" == status_of_node(DICT_FROM_YAML, DICT_FROM_YML, "age")
-    assert "not_equal" == status_of_node(DICT_FROM_YAML, DICT_FROM_YML, "name")
-    assert "only_1" == status_of_node(DICT_FROM_YAML, DICT_FROM_YML, "occupat")
-    assert "only_2" == status_of_node(DICT_FROM_YAML, DICT_FROM_YML, "oc")
-
-
-def test_value_of_leaf():
-    assert {"first": DICT_FROM_JSON["common"]["setting1"]} == value_of_leaf(
-        DICT_FROM_JSON["common"], DICT2["common"], "setting1", "equal"
+    with open(path_correct, "r") as fp:
+        assert fp.read() == generate_diff(path1, path2, format_out)
+    assert "This format is not supported" == generate_diff(
+        path1, path2, "surprise"
     )
-    assert {"first": DICT_FROM_JSON["common"]["setting1"]} == value_of_leaf(
-        DICT_FROM_JSON["common"], DICT2["common"], "setting1", "only_1"
-    )
-    assert {
-        "first": DICT_FROM_JSON["common"]["setting3"],
-        "second": DICT2["common"]["setting3"],
-    } == value_of_leaf(
-        DICT_FROM_JSON["common"], DICT2["common"], "setting3", "not_equal"
-    )
-    assert {"second": DICT2["common"]["follow"]} == value_of_leaf(
-        DICT_FROM_JSON["common"], DICT2["common"], "follow", "only_2"
-    )
+
+
+@pytest.mark.parametrize(
+    "correct, path, func",
+    [
+        (".json", "tests/fixtures/file1.JSON", get_format),
+        (DICT_FROM_JSON, "tests/fixtures/file1.JSON", get_dict),
+        ("not supported", "tests/fixtures/flat_jaml.txt", get_dict),
+        (DICT_FROM_YAML, "tests/fixtures/file_one.yml", get_dict),
+    ],
+)
+def test_read_get_dict(correct, path, func):
+    assert correct == func(path)
+
+
+@pytest.mark.parametrize(
+    "correct, func, arg1, arg2, arg3",
+    [
+        ("dir", type_of_node, DICT_FROM_JSON, DICT2, "common"),
+        ("leaf", type_of_node, DICT_FROM_JSON, DICT2, "setting2"),
+        ("equal", status_of_node, DICT_FROM_YAML, DICT_FROM_YML, "age"),
+        ("not_equal", status_of_node, DICT_FROM_YAML, DICT_FROM_YML, "name"),
+        ("only_1", status_of_node, DICT_FROM_YAML, DICT_FROM_YML, "occupat"),
+        ("only_2", status_of_node, DICT_FROM_YAML, DICT_FROM_YML, "oc"),
+    ],
+)
+def test_type_of_node_and_status(correct, func, arg1, arg2, arg3):
+    assert correct == func(arg1, arg2, arg3)
+
+
+@pytest.mark.parametrize(
+    "correct, arg1, arg2, arg3, arg4",
+    [
+        (
+            {"first": DICT_FROM_JSON["common"]["setting1"]},
+            DICT_FROM_JSON["common"],
+            DICT2["common"],
+            "setting1",
+            "equal",
+        ),
+        (
+            {"first": DICT_FROM_JSON["common"]["setting1"]},
+            DICT_FROM_JSON["common"],
+            DICT2["common"],
+            "setting1",
+            "only_1",
+        ),
+        (
+            {
+                "first": DICT_FROM_JSON["common"]["setting3"],
+                "second": DICT2["common"]["setting3"],
+            },
+            DICT_FROM_JSON["common"],
+            DICT2["common"],
+            "setting3",
+            "not_equal",
+        ),
+        (
+            {"second": DICT2["common"]["follow"]},
+            DICT_FROM_JSON["common"],
+            DICT2["common"],
+            "follow",
+            "only_2",
+        ),
+    ],
+)
+def test_value_of_leaf(correct, arg1, arg2, arg3, arg4):
+    assert correct == value_of_leaf(arg1, arg2, arg3, arg4)
 
 
 def test_get_node():
@@ -86,7 +135,7 @@ def test_get_node():
         "name": "setting1",
         "node_type": "leaf",
         "status": "equal",
-        "value": "Value 1"
+        "value": "Value 1",
     } == get_node("setting1", "equal", type_node="leaf", value="Value 1")
 
 
